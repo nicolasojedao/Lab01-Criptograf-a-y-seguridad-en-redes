@@ -3,48 +3,38 @@ import sys
 def cifrado_cesar(texto, desplazamiento):
     resultado = []
 
-    for caracter in texto:
-        if caracter.islower():  
-            
-            indice = ord(caracter) - ord('a')
-            
-            nuevo_indice = (indice + desplazamiento) % 26
-        
-            nuevo_caracter = chr(nuevo_indice + ord('a'))
-            resultado.append(nuevo_caracter)
-
-        elif caracter.isupper():  
-            
-            indice = ord(caracter) - ord('A')
-            
-            nuevo_indice = (indice + desplazamiento) % 26
-            
-            nuevo_caracter = chr(nuevo_indice + ord('A'))
-            resultado.append(nuevo_caracter)
-
-        elif caracter.isdigit():  
-            
-            indice = ord(caracter) - ord('0')
-            
-            nuevo_indice = (indice + desplazamiento) % 10
-            
-            nuevo_caracter = chr(nuevo_indice + ord('0'))
-            resultado.append(nuevo_caracter)
-        elif caracter == " ":
-            resultado.append(caracter)
-
+    for char in texto:
+        if char.islower():  # Si el carácter es una letra minúscula
+            # Realiza el desplazamiento dentro del rango 'a-z'
+            resultado.append(chr((ord(char) - ord('a') + desplazamiento) % 26 + ord('a')))
+        elif char.isupper():  # Si el carácter es una letra mayúscula
+            # Realiza el desplazamiento dentro del rango 'A-Z'
+            resultado.append(chr((ord(char) - ord('A') + desplazamiento) % 26 + ord('A')))
+        elif char.isdigit():  # Si el carácter es un número
+            # Realiza el desplazamiento dentro del rango '0-9'
+            resultado.append(chr((ord(char) - ord('0') + desplazamiento) % 10 + ord('0')))
+        else:
+            # Si no es una letra ni un número, se deja intacto (espacios, puntuación, etc.)
+            resultado.append(char)
+    
     return ''.join(resultado)
 
-
-
-
-if len(sys.argv) < 3:
-    print("Uso: python3 script.py <input_string> <input_int>")
-    sys.exit(1)
+def main():
+    # Obtener argumentos desde la línea de comandos
+    if len(sys.argv) != 3:
+        print("Uso: python3 cifrado_cesar.py '<oracion>' <desplazamiento>")
+        sys.exit(1)
     
-input_string = sys.argv[1]
-input_entero = int(sys.argv[2])
+    texto = sys.argv[1]
+    try:
+        desplazamiento = int(sys.argv[2])
+    except ValueError:
+        print("El desplazamiento debe ser un número entero.")
+        sys.exit(1)
 
-texto_cifrado = cifrado_cesar(input_string, input_entero)
-print("Texto original:", input_string)
-print("Texto cifrado:", texto_cifrado)
+    # Llamar a la función de cifrado y mostrar el resultado
+    resultado = cifrado_cesar(texto, desplazamiento)
+    print(resultado)
+
+if __name__ == "__main__":
+    main()
